@@ -32,6 +32,8 @@ unset SOTRUSS_OUTNAME
 unset SOTRUSS_EXIT
 unset SOTRUSS_NOINDENT
 SOTRUSS_WHICH=$$
+
+# shellcheck disable=2016
 lib='/usr/$LIB/audit/sotruss-lib.so'
 
 # shellcheck disable=2016
