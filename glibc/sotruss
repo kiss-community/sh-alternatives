@@ -17,6 +17,13 @@
 # License along with the GNU C Library; if not, see
 # <https://www.gnu.org/licenses/>.
 
+# This script was ported from bash to POSIX sh by depsterr
+# <depsterr at protonmail dot com>
+
+# This script is meant to be fully compatible with the gnu sotruss
+# version.
+
+# GNU's version
 SOTRUSS_VERSION=2.30
 
 unset SOTRUSS_FROMLIST
