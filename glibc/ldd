@@ -86,7 +86,7 @@ LD_LIBRARY_VERSION=\$verify_out LD_VERBOSE=$verbose"
 
 # shellcheck disable=2086
 [ -z "$1" ] && {
-    printf "\n: missing file arguments\nrun '%s --help' for more information." "$0" "$0" >&2
+    printf "%s: missing file arguments\nrun '%s --help' for more information.\n" "$0" "$0" >&2
     exit 1
 }
 
