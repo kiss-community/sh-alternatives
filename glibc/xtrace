@@ -1,5 +1,0 @@
-#!/bin/sh
-# This program is beyond saving.
-printf '%s: this program is not supported on your distrobution.
-please look into alternatives such as sotruss, ltrace or strace.\n' "$0"
-exit 1
