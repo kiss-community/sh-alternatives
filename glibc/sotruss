@@ -57,72 +57,72 @@ short options.\n' "$0"
 }
 
 do_missing_arg() {
-  printf "%s: option requires an argument -- '%s' 
+  printf "%s: option requires an argument -- '%s'
 run '%s --help' or '%s --usage' for more information.\n" "$0" "$1" "$0" "$0" >&2 
   exit 1
 }
 
 while test $# -gt 0; do
   case "$1" in
-  --v | --ve | --ver | --vers | --versi | --versio | --version)
-    printf '%s\n' "$SOTRUSS_VERSION"
-    exit 0
+      --v*)
+        printf '%s\n' "$SOTRUSS_VERSION"
+        exit 0
     ;;
-  -\? | --h | --he | --hel | --help)
-    do_help
+      -\? | --h*)
+        do_help
     ;;
-  --u | --us | --usa | --usag | --usage)
-    printf "Usage: %s [-ef] [-F FROMLIST] [-o FILENAME] [-T TOLIST] [--exit]
-	    [--follow] [--from FROMLIST] [--output FILENAME] [--to TOLIST]
-	    [--help] [--usage] [--version] [--]
-	    EXECUTABLE [EXECUTABLE-OPTION...]\n" "$0"
-    exit 0
+      --u*)
+        printf "Usage: %s [-ef] [-F FROMLIST] [-o FILENAME] [-T TOLIST] [--exit]
+            [--follow] [--from FROMLIST] [--output FILENAME] [--to TOLIST]
+            [--help] [--usage] [--version] [--]
+            EXECUTABLE [EXECUTABLE-OPTION...]\n" "$0"
+        exit 0
     ;;
-  -F | --fr | --fro | --from)
-    if test $# -eq 1; then
-      do_missing_arg "$1"
-    fi
-    shift
-    SOTRUSS_FROMLIST="$1"
+      -F | --f*)
+        if test $# -eq 1; then
+          do_missing_arg "$1"
+        fi
+        shift
+        SOTRUSS_FROMLIST="$1"
     ;;
-  -T | --t | --to)
-    if test $# -eq 1; then
-      do_missing_arg "$1"
-    fi
-    shift
-    SOTRUSS_TOLIST="$1"
+      -T | --t*)
+        if test $# -eq 1; then
+          do_missing_arg "$1"
+        fi
+        shift
+        SOTRUSS_TOLIST="$1"
     ;;
-  -o | --o | --ou | --out | --outp | --outpu | --output)
-    if test $# -eq 1; then
-      do_missing_arg "$1"
-    fi
-    shift
-    SOTRUSS_OUTNAME="$1"
+      -o | --o*)
+        if test $# -eq 1; then
+          do_missing_arg "$1"
+        fi
+        shift
+        SOTRUSS_OUTNAME="$1"
     ;;
-  -f | --fo | --fol | --foll | --follo | --follow)
-    unset SOTRUSS_WHICH
+      -f | --f*)
+        unset SOTRUSS_WHICH
     ;;
-  -l | --l | --li | --lib)
-    if test $# -eq 1; then
-      do_missing_arg "$1"
-    fi
-    shift
-    lib="$1"
+      -l | --l*)
+        if test $# -eq 1; then
+          do_missing_arg "$1"
+        fi
+        shift
+        lib="$1"
     ;;
-  -e | --e | --ex | --exi | --exit)
-    SOTRUSS_EXIT=1
+      -e | --e*)
+        SOTRUSS_EXIT=1
     ;;
-  --)
-    shift
-    break
+      --)
+        shift
+        break
     ;;
-  -*)
-    printf "%s: unrecognized option '%s'\n
-run \`%s --help' or \`%s --usage' for more information.\n" "$0" "$1" "$0" "$0" >&2 
-    exit 1
+      -*)
+        printf "%s: unrecognized option '%s'\n
+run \`%s --help' or \`%s --usage' for more information.\n" "$0" "$1" "$0" "$0" >&2
+        exit 1
     ;;
-  *)
-    break
+      *)
+        break
     ;;
   esac
   shift
