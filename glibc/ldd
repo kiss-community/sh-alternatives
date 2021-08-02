@@ -35,47 +35,55 @@ LDD_VERSION=2.33
 
 while [ $# -gt 0 ]; do
     case "$1" in
-    --vers*)
-        printf '%s\n' "$LDD_VERSION"
-        exit 0
+        --vers*)
+            printf '%s\n' "$LDD_VERSION"
+            exit 0
         ;;
-    --h*)
-        printf 'Usage: %s [OPTION]... FILE...
-    --help                    print this help and exit
-    --version                 print version information and exit
-    -d, --data-relocs         process data relocations
-    -r, --function-relocs     process data and function relocations
-    -u, --unused              print unused direct dependencies
-    -v, --verbose             print all information
-' "$0"
-        exit 0
+
+        --h*)
+            printf 'Usage: %s [OPTION]... FILE...
+        --help                    print this help and exit
+        --version                 print version information and exit
+        -d, --data-relocs         process data relocations
+        -r, --function-relocs     process data and function relocations
+        -u, --unused              print unused direct dependencies
+        -v, --verbose             print all information
+    ' "$0"
+            exit 0
         ;;
-    -d*)
-        warn=yes
-        shift
+
+        -d*)
+            warn=yes
+            shift
         ;;
-    -r | --f*)
-        warn=yes
-        bind_now=yes
-        shift
+
+        -r | --f*)
+            warn=yes
+            bind_now=yes
+            shift
         ;;
-    -v | --verb*)
-        verbose=yes
-        shift
+
+        -v | --verb*)
+            verbose=yes
+            shift
         ;;
-    -u | --u*)
-        unused=yes
-        shift
+
+        -u | --u*)
+            unused=yes
+            shift
         ;;
-    --)
-        shift; break
+
+        --)
+            shift; break
         ;;
-    -*)
-        printf "%s: unrecognized option '%s'\nrun '%s --help' for more information.\n" "$0" "$1" "$0" >&2
-        exit 1
+
+        -*)
+            printf "%s: unrecognized option '%s'\nrun '%s --help' for more information.\n" "$0" "$1" "$0" >&2
+            exit 1
         ;;
-    *)
-        break
+
+        *)
+            break
         ;;
     esac
 done
@@ -118,22 +126,24 @@ for file in $@; do
                 0|2)
                     LD="$ld"
                     break
-                    ;;
+                ;;
             esac
         done
 
         case "$ret" in
+            0|2)
+                "$LD" "$file" || result=1
+            ;;
+
             1)
                 printf "%s: error: '%s' is not a dynamic executable\n" "$0" "$file" >&2
                 result=1
-                ;;
-            0|2)
-                "$LD" "$file" || result=1
-                ;;
+            ;;
+
             *)
                 printf "%s: error %s exited with unknown exit code (%s)\n" "$0" "$LD" "$ret" >&2
                 exit 1
-                ;;
+            ;;
         esac
     else
         printf "%s: error: you do not have read permission for '%s'\n" "$0" "$file" >&2
