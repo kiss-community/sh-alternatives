@@ -80,35 +80,39 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-add_env="LD_TRACE_LOADED_OBJECTS=1 LD_WARN=$warn LD_BIND_NOW=$bind_now
-LD_LIBRARY_VERSION=\$verify_out LD_VERBOSE=$verbose"
-[ "$unused" = yes ] && add_env="$add_env LD_DEBUG=\"$LD_DEBUG${LD_DEBUG:+,}unused\""
-
-# shellcheck disable=2086
 [ -z "$1" ] && {
     printf "%s: missing file arguments\nrun '%s --help' for more information.\n" "$0" "$0" >&2
     exit 1
 }
 
 result=0
-# This is done on purpose.
+
+for e in LD_TRACE_LOADED_OBJECTS=1 LD_WARN=$warn LD_BIND_NOW=$bind_now \
+         LD_LIBRARY_VERSION=$verify_out LD_VERBOSE=$verbose; do
+     export "${e?}"
+done
+
+[ "$unused" = yes ] && export LD_DEBUG="$LD_DEBUG${LD_DEBUG:+,}unused"
+
 # shellcheck disable=2068
 for file in $@; do
     printf '%s:\n' "$file"
+
     [ "${file#/}" = "$file" ] && file="./$file"
+
     if [ ! -e "$file" ]; then
         printf "%s: %s: No such file or directory\n" "$0" "$file" >&2
         result=1
     elif [ ! -f "$file" ]; then
-        printf "%s: %s: not regular file\n" "$0" "$file" >&2
+        printf "%s: %s: not a regular file\n" "$0" "$file" >&2
         result=1
     elif [ -r "$file" ]; then
         ret=1
-        # Used in eval
+
         # shellcheck disable=2034
         for ld in $LD_LIST; do
             [ -x "$ld" ] || continue
-            verify_out="$("$ld" --verify "$1")"
+            verify_out="$("$ld" --verify "$file")"
             ret="$?"
             case $ret in
                 0|2)
@@ -117,15 +121,14 @@ for file in $@; do
                     ;;
             esac
         done
+
         case "$ret" in
             1)
                 printf "%s: error: '%s' is not a dynamic executable\n" "$0" "$file" >&2
                 result=1
                 ;;
             0|2)
-                # This is done on purpose.
-                # shellcheck disable=2086
-                ( eval $add_env "$LD" "$file" ) || result=1    
+                "$LD" "$file" || result=1
                 ;;
             *)
                 printf "%s: error %s exited with unknown exit code (%s)\n" "$0" "$LD" "$ret" >&2
