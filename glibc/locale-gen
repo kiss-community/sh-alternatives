@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ "$(whoami)" = root ] || {
+[ "$(id -u)" = 0 ] || {
     printf "%s: error, please run with root privliges\n" "$0" >&2
     exit 1
 }
