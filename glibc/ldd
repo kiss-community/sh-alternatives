@@ -48,7 +48,7 @@ while [ $# -gt 0 ]; do
         -r, --function-relocs     process data and function relocations
         -u, --unused              print unused direct dependencies
         -v, --verbose             print all information
-    ' "$0"
+' "$0"
             exit 0
         ;;
 
@@ -102,8 +102,7 @@ done
 
 [ "$unused" = yes ] && export LD_DEBUG="$LD_DEBUG${LD_DEBUG:+,}unused"
 
-# shellcheck disable=2068
-for file in $@; do
+for file in "$@"; do
     [ "${file#/}" = "$file" ] && file="./$file"
 
     printf '%s:\n' "$file"
